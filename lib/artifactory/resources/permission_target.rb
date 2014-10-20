@@ -61,9 +61,9 @@ module Artifactory
       #
       def from_hash(hash, options = {})
         super.tap do |instance|
-          %w(users groups).each do |thing|
-            if instance.principals.key?(thing) && !instance.principals[thing].nil?
-              instance.principals[thing] = Hash[instance.principals[thing].map { |k, v| [k, verbose(v)] } ]
+          %w(users groups).each do |key|
+            if instance.principals[key] && !instance.principals[key].nil?
+              instance.principals[key] = Hash[instance.principals[key].map { |k, v| [k, verbose(v)] } ]
             end
           end
         end
