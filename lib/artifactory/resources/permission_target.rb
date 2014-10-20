@@ -106,7 +106,7 @@ module Artifactory
     # @return [Boolean]
     #
     def save
-      send("#{:principals}=", { 'users' => abbreviate(users), 'groups' => abbreviate(groups) })
+      send("#{:principals}=", { 'users' => abbreviate_principal(users), 'groups' => abbreviate_principal(groups) })
       client.put(api_path, to_json, headers)
       true
     end
@@ -164,7 +164,7 @@ module Artifactory
     #
     # Replace an array of verbose permission names with an equivalent array of abbreviated permission names.
     #
-    def abbrev(array)
+    def abbreviate_permissions(array)
       inverse = VERBOSE_PERMS.invert
       if (inverse.keys & array).sort != array.sort then
         raise "One of your principals contains an invalid permission.  Valid permissions are #{inverse.keys.join(', ')}"
@@ -175,8 +175,8 @@ module Artifactory
     #
     # Replace a principal with verbose permissions with an equivalent one with abbreviated permissions.
     #
-    def abbreviate(principal_hash)
-      Hash[principal_hash.map { |k, v| [k, abbrev(v)] } ]
+    def abbreviate_principal(principal_hash)
+      Hash[principal_hash.map { |k, v| [k, abbreviate_permissions(v)] } ]
     end
   end
 end
